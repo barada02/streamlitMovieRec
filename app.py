@@ -12,24 +12,6 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS
-st.markdown("""
-    <style>
-    .main {
-        padding: 2rem;
-    }
-    .stTitle {
-        color: #FF4B4B;
-        font-size: 3rem !important;
-    }
-    .stButton>button {
-        background-color: #FF4B4B;
-        color: white;
-        border-radius: 5px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
 # Sample movie data (in real app, you would use a larger dataset)
 movies_data = {
     'title': [
@@ -55,24 +37,85 @@ movies_data = {
         'The story of Henry Hill and his life in the mob.',
         'A young FBI cadet must receive help from an incarcerated cannibal killer.',
         'A team of explorers travel through a wormhole in space.'
+    ],
+    'year': [1994, 1972, 2008, 1994, 1999, 2010, 1999, 1990, 1991, 2014],
+    'poster_path': [
+        '/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg',
+        '/3bhkrj58Vtu7enYsRolD1fZdja1.jpg',
+        '/qJ2tW6WMUDux911r6m7haRef0WH.jpg',
+        '/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg',
+        '/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg',
+        '/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg',
+        '/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg',
+        '/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg',
+        '/rplLJ2hPcOQmkFhTqUte0MkEaO2.jpg',
+        '/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg'
     ]
 }
 
 # Convert to DataFrame
 movies_df = pd.DataFrame(movies_data)
 
+# TMDB configuration
+TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
+
+# Function to display rating as stars
+def display_rating_stars(rating):
+    full_stars = int(rating // 1)
+    half_star = rating % 1 >= 0.5
+    empty_stars = 5 - full_stars - (1 if half_star else 0)
+    
+    stars = "⭐" * full_stars
+    if half_star:
+        stars += "½"
+    return stars
+
+# Custom CSS with dark mode support
+st.markdown("""
+    <style>
+    .main {
+        padding: 2rem;
+    }
+    .movie-container {
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+    }
+    .movie-title {
+        color: #FF4B4B;
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+    .movie-info {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.9rem;
+    }
+    .movie-poster {
+        border-radius: 10px;
+        max-width: 100%;
+        height: auto;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 # Title and introduction
 st.title("🎬 Movie Recommendation System")
 st.markdown("### Discover Your Next Favorite Movie!")
 
 # Sidebar
-st.sidebar.header("Filters")
-selected_genre = st.sidebar.multiselect(
-    "Select Genre(s)",
-    sorted(list(set([genre.strip() for genres in movies_df['genre'] for genre in genres.split(',')])))
-)
-
-min_rating = st.sidebar.slider("Minimum Rating", 0.0, 10.0, 8.0, 0.1)
+with st.sidebar:
+    st.header("Filters")
+    selected_genre = st.multiselect(
+        "Select Genre(s)",
+        sorted(list(set([genre.strip() for genres in movies_df['genre'] for genre in genres.split(',')])))
+    )
+    
+    min_rating = st.slider("Minimum Rating", 0.0, 10.0, 8.0, 0.1)
+    
+    st.markdown("---")
+    st.markdown("### About")
+    st.markdown("This app helps you discover movies based on your preferences. It uses content-based filtering to recommend similar movies.")
 
 # Main content
 col1, col2 = st.columns([2, 1])
@@ -82,7 +125,6 @@ with col1:
     search_query = st.text_input("Enter a movie title or keywords")
     
     if search_query:
-        # Simple search implementation
         filtered_movies = movies_df[
             movies_df['title'].str.contains(search_query, case=False) |
             movies_df['description'].str.contains(search_query, case=False)
@@ -90,9 +132,16 @@ with col1:
         
         if not filtered_movies.empty:
             for _, movie in filtered_movies.iterrows():
-                with st.expander(f"{movie['title']} ({movie['rating']})"):
-                    st.write(f"**Genre:** {movie['genre']}")
-                    st.write(f"**Description:** {movie['description']}")
+                with st.container():
+                    cols = st.columns([1, 2])
+                    with cols[0]:
+                        st.image(f"{TMDB_IMAGE_BASE_URL}{movie['poster_path']}", use_column_width=True)
+                    with cols[1]:
+                        st.markdown(f"### {movie['title']} ({movie['year']})")
+                        st.markdown(f"**Rating:** {display_rating_stars(movie['rating'])} ({movie['rating']})")
+                        st.markdown(f"**Genre:** {movie['genre']}")
+                        st.markdown(f"**Description:** {movie['description']}")
+                st.markdown("---")
         else:
             st.info("No movies found matching your search.")
 
@@ -106,7 +155,10 @@ with col2:
         )]
     
     for _, movie in top_movies.head().iterrows():
-        st.write(f"**{movie['title']}** ({movie['rating']})")
+        with st.container():
+            st.image(f"{TMDB_IMAGE_BASE_URL}{movie['poster_path']}", use_column_width=True)
+            st.markdown(f"**{movie['title']}** ({movie['year']})")
+            st.markdown(display_rating_stars(movie['rating']))
 
 # Movie recommendation function
 def get_recommendations(movie_title):
@@ -132,9 +184,16 @@ if st.button("Get Recommendations"):
     st.write("Based on your selection, you might also like:")
     
     for _, movie in recommendations.iterrows():
-        with st.expander(f"{movie['title']} ({movie['rating']})"):
-            st.write(f"**Genre:** {movie['genre']}")
-            st.write(f"**Description:** {movie['description']}")
+        with st.container():
+            cols = st.columns([1, 2])
+            with cols[0]:
+                st.image(f"{TMDB_IMAGE_BASE_URL}{movie['poster_path']}", use_column_width=True)
+            with cols[1]:
+                st.markdown(f"### {movie['title']} ({movie['year']})")
+                st.markdown(f"**Rating:** {display_rating_stars(movie['rating'])} ({movie['rating']})")
+                st.markdown(f"**Genre:** {movie['genre']}")
+                st.markdown(f"**Description:** {movie['description']}")
+        st.markdown("---")
 
 # Footer
 st.markdown("---")
