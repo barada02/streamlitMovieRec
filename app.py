@@ -15,41 +15,75 @@ st.set_page_config(
 # Sample movie data (in real app, you would use a larger dataset)
 movies_data = {
     'title': [
-        'The Shawshank Redemption', 'The Godfather', 'The Dark Knight',
-        'Pulp Fiction', 'Fight Club', 'Inception', 'The Matrix',
-        'Goodfellas', 'The Silence of the Lambs', 'Interstellar'
+        'The Shawshank Redemption', 'Avengers: Infinity War', 'The Dark Knight',
+        'Iron Man', 'Black Panther', 'Inception', 'The Matrix',
+        'A Beautiful Mind', 'Interstellar', 'The Theory of Everything',
+        'Doctor Strange', 'Dune', 'The Imitation Game', 'Spider-Man: No Way Home',
+        'The Social Network', 'Blade Runner 2049', 'The Martian', 'Hidden Figures',
+        'Guardians of the Galaxy', 'Captain America: Winter Soldier'
     ],
     'genre': [
-        'Drama', 'Crime, Drama', 'Action, Crime, Drama',
-        'Crime, Drama', 'Drama', 'Action, Adventure, Sci-Fi',
-        'Action, Sci-Fi', 'Biography, Crime, Drama',
-        'Crime, Drama, Thriller', 'Adventure, Drama, Sci-Fi'
+        'Drama', 'Action, Adventure, Sci-Fi', 'Action, Crime, Drama',
+        'Action, Adventure, Sci-Fi', 'Action, Adventure, Sci-Fi', 'Action, Adventure, Sci-Fi',
+        'Action, Sci-Fi', 'Biography, Drama', 'Adventure, Drama, Sci-Fi', 'Biography, Drama, Romance',
+        'Action, Adventure, Fantasy', 'Adventure, Sci-Fi', 'Biography, Drama, Thriller',
+        'Action, Adventure, Fantasy', 'Biography, Drama', 'Drama, Mystery, Sci-Fi',
+        'Adventure, Drama, Sci-Fi', 'Biography, Drama, History',
+        'Action, Adventure, Comedy', 'Action, Adventure, Sci-Fi'
     ],
-    'rating': [9.3, 9.2, 9.0, 8.9, 8.8, 8.8, 8.7, 8.7, 8.6, 8.6],
+    'rating': [
+        9.3, 8.4, 9.0, 7.9, 7.3, 8.8, 8.7,
+        8.2, 8.6, 7.7, 7.5, 8.0, 8.0, 8.2,
+        7.8, 8.0, 8.0, 7.8, 8.0, 7.8
+    ],
     'description': [
         'Two imprisoned men bond over a number of years.',
-        'The aging patriarch of an organized crime dynasty transfers control.',
+        'The Avengers must stop Thanos from collecting all six Infinity Stones.',
         'The Dark Knight of Gotham City begins his war on crime.',
-        'The lives of two mob hitmen, a boxer, and a pair of diner bandits intertwine.',
-        'An insomniac office worker and a devil-may-care soapmaker form an underground fight club.',
+        'Tony Stark builds an armored suit and becomes Iron Man.',
+        "T'Challa, heir to Wakanda, must prevent a world war.",
         'A thief who steals corporate secrets through dream-sharing technology.',
         'A computer programmer discovers a mysterious world.',
-        'The story of Henry Hill and his life in the mob.',
-        'A young FBI cadet must receive help from an incarcerated cannibal killer.',
-        'A team of explorers travel through a wormhole in space.'
+        'A brilliant but asocial mathematician accepts secret work in cryptography.',
+        'A team of explorers travel through a wormhole in space.',
+        'The story of the relationship between Stephen Hawking and his wife.',
+        'Dr. Strange learns the mystic arts after a career-ending accident.',
+        'Paul Atreides leads nomadic tribes in a battle for a desert planet.',
+        'Alan Turing tries to crack the German Enigma code during World War II.',
+        'Spider-Man seeks Doctor Strange\'s help to make his identity secret again.',
+        'Mark Zuckerberg creates Facebook while facing multiple lawsuits.',
+        'A blade runner uncovers a secret that threatens humanity.',
+        'An astronaut becomes stranded alone on Mars.',
+        'African American women mathematicians work at NASA during the Space Race.',
+        'A group of intergalactic criminals must save the universe.',
+        'Captain America and Black Widow face a powerful new enemy.'
     ],
-    'year': [1994, 1972, 2008, 1994, 1999, 2010, 1999, 1990, 1991, 2014],
+    'year': [
+        1994, 2018, 2008, 2008, 2018, 2010, 1999,
+        2001, 2014, 2014, 2016, 2021, 2014, 2021,
+        2010, 2017, 2015, 2016, 2014, 2014
+    ],
     'poster_path': [
         '/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg',
-        '/3bhkrj58Vtu7enYsRolD1fZdja1.jpg',
+        '/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg',
         '/qJ2tW6WMUDux911r6m7haRef0WH.jpg',
-        '/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg',
-        '/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg',
+        '/78lPtwv72eTNqFW9COBYI0dWDJa.jpg',
+        '/uxzzxijgPIY7slzFvMotPv8wjKA.jpg',
         '/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg',
         '/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg',
-        '/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg',
-        '/rplLJ2hPcOQmkFhTqUte0MkEaO2.jpg',
-        '/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg'
+        '/zwzWCmH72OSC9NA0ipoqw5Zjya8.jpg',
+        '/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg',
+        '/4XoTv9FW9999I1z3uXYX1FqFZ4h.jpg',
+        '/uGBVj3bEbCoZbDjjl9wTxcygko1.jpg',
+        '/d5NXSklXo0qyIYkgV94XAgMIckC.jpg',
+        '/zSqJ1qFq8NXFfi7JeIYMlzyR0dx.jpg',
+        '/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg',
+        '/n0ybibhJtQ5icDqTp8eRytcIHJx.jpg',
+        '/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg',
+        '/5BHuvQ6p9kfc091Z8RiFNhCwL4b.jpg',
+        '/6cbIDZLfwUTmttXTmNi8Mp3Rnmg.jpg',
+        '/r7vmZjiyZw9rpJMQJdXpjgiCOk9.jpg',
+        '/tVFRpFw3xTedgPGqxW0AOI8Qhh0.jpg'
     ]
 }
 
